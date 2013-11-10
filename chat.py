@@ -95,6 +95,7 @@ class Chat(object):
         """
          # check each pattern
         for (pattern, response) in self._pairs:
+            #Adding type to the input
             newinput = type+":"+input
             print "New Input %s" %(newinput)
             match = pattern.match(newinput)
