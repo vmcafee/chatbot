@@ -55,12 +55,12 @@ pairs = (
        "Dumb ass I won't tell you the answer! Ask me something else")
      ),
     (r"person:answer(.*) ",
-     ( "Looks like you didn't type the question correctly, try again may be!!",
-       "Dumb ass I won't tell you the answer! Ask me something else")
-     ),
+     ( "See I got the information for you %1, looks like you like this person, why?",
+       "Let's see, this person is %1, who else do you want to know about ",
+       "Dumb ass I won't tell you the answer! Ask me something else")),
     (r"person:(.*) ",
-     ( "Looks like you didn't type the question correctly, try again may be!!",
-       "Dumb ass I won't tell you the answer! Ask me something else")
+     ( "I have no clue who this person is, why do you ask?",
+       "I won't tell you the answer! Ask me something else")
      ),
     (r"location:answer(.*) ",
      ( "Looks like you didn't type the question correctly, try again may be!!",
@@ -70,15 +70,12 @@ pairs = (
      ( "Looks like you didn't type the question correctly, try again may be!!",
        "Dumb ass I won't tell you the answer! Ask me something else")
      ),
-    # anything else
     (r'(.*)',
-     (
-         "(Looking soulfully) treat please...",
-         "Did you say 'Let's go for a walk?'",
-         "Yes! Yes! Nap time!",
-     )
+    (
+     "(Looking soulfully) treat please...",
+     "Did you say 'Let's go for a walk?'",
+     "Yes! Yes! Nap time!"))
     )
-)
 
 chatbot = c.Chat(pairs, nltk.chat.eliza.reflections)
 

@@ -142,8 +142,17 @@ class Chat(object):
                         self.named_entity = self.get_namedentity(input)
                     else:
                         print "wolfram else"
-                        # Here start a generic conversation, ask new questions, change topic etc
+                       # Here start a generic conversation, ask new questions, change topic etc
+                self.named_entity = self.get_namedentity(input)
 
+                #self.named_entity[3] is to get Person named entity
+                if(self.named_entity[1]):
+                    print self.named_entity[1]
+                    if (answer):
+                        type = "person:answer"
+                    else:
+                        type = "person"
+                    print self.respond(ques+" "+str(answer), answer,"person")
 
     def parse_mathexpression(self,input):
         pattern = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')
@@ -191,7 +200,7 @@ class Chat(object):
                 if chunk.node =='GSP' or chunk.node =='GPE' :
                     gpe = ' '.join([c[0] for c in chunk.leaves()])
                     self.gpelist.append(gpe)
-
+        print [self.orglist, self.personlist, self.gpelist]
         return [self.orglist, self.personlist, self.gpelist]
 
 
