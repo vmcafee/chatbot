@@ -87,13 +87,11 @@ class Chat(object):
              pos = string.find(response,'%')
          return response
 
+    #Passing type here to give relevant reponses back
     def respond(self, input, answer, type):
         """
-         Generate a response to the user input.
 
-         @type str: C{string}
-         @param str: The string to be mapped
-         @rtype: C{string}
+
         """
          # check each pattern
         for (pattern, response) in self._pairs:
@@ -124,9 +122,9 @@ class Chat(object):
             except EOFError:
                 print input             
             if input:
-                #print input
                 while input[-1] in "!.?":
                     input = input[:-1]
+                #Passing input to see of there is an mathematical expression
                 ques,answer = self.parse_mathexpression(input)
                 if(answer):
                     try:
@@ -135,9 +133,12 @@ class Chat(object):
                     except:
                         print self.respond(ques+" "+str(answer), answer,"maths:error")
                 else:
+                    #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
                     if (answer):
-                        print answer
+                        print "Answer from wolfram %s" %(answer)
+                        #Now check the named entity in the question
+                        self.named_entity = self.get_namedentity(input)
                     else:
                         print "wolfram else"
                         # Here start a generic conversation, ask new questions, change topic etc
@@ -169,21 +170,29 @@ class Chat(object):
             output = ""
         return output
         
-    def get_namedentity():
+    def get_namedentity(self,input):
         self.orglist = []
         self.personlist = []
-
-
-        sent = "vanessa is at UC Berkeley"
-        text = nltk.pos_tag(sent.split())
+        self.gpelist = []
+        print input
+        text = nltk.pos_tag(input.split())
+        print text
         out = nltk.ne_chunk(text)
-
+        print out
         for chunk in out:
             if hasattr(chunk,'node'):
                 if chunk.node =='ORGANIZATION':
                     organization = ' '.join([c[0] for c in chunk.leaves()])
-                    orglist.append(organization)
-        print orglist
+                    self.orglist.append(organization)
+                if chunk.node =='PERSON':
+                    person = ' '.join([c[0] for c in chunk.leaves()])
+                    self.personlist.append(person)
+                if chunk.node =='GSP' or chunk.node =='GPE' :
+                    gpe = ' '.join([c[0] for c in chunk.leaves()])
+                    self.gpelist.append(gpe)
+
+        return [self.orglist, self.personlist, self.gpelist]
+
 
     def parse_entity(self,input):
         sent = "vanessa is at UC Berkeley"

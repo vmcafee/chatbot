@@ -42,7 +42,31 @@ pairs = (
      ( "You're lazy, you just typed the expression or you didn't type the text correctly, answer is %1 ",
        "you got it! the answer is %1")
      ),
-    (r"maths: error",
+    (r"maths:error",
+     ( "Looks like you didn't type the question correctly, try again may be!!",
+       "Dumb ass I don't understand your question! Ask me something else")
+     ),
+    (r"organization:answer(.*) ",
+     ( "Looks like you didn't type the question correctly, try again may be!!",
+       "Dumb ass I won't tell you the answer! Ask me something else")
+     ),
+    (r"organization:(.*) ",
+     ( "Looks like you didn't type the question correctly, try again may be!!",
+       "Dumb ass I won't tell you the answer! Ask me something else")
+     ),
+    (r"person:answer(.*) ",
+     ( "Looks like you didn't type the question correctly, try again may be!!",
+       "Dumb ass I won't tell you the answer! Ask me something else")
+     ),
+    (r"person:(.*) ",
+     ( "Looks like you didn't type the question correctly, try again may be!!",
+       "Dumb ass I won't tell you the answer! Ask me something else")
+     ),
+    (r"location:answer(.*) ",
+     ( "Looks like you didn't type the question correctly, try again may be!!",
+       "Dumb ass I won't tell you the answer! Ask me something else")
+     ),
+    (r"location:(.*) ",
      ( "Looks like you didn't type the question correctly, try again may be!!",
        "Dumb ass I won't tell you the answer! Ask me something else")
      ),
