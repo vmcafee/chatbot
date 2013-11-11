@@ -136,7 +136,7 @@ pairs = (
 chatbot = c.Chat(pairs, nltk.chat.eliza.reflections)
 
 def dog_chat():
-    print "Hi there! I'm Mimi and I like solving math problems. Ask me something."
+    print "Hi there! I'm Mimi and I like answering questions. Ask me something."
     chatbot.converse()
 
 def demo():
