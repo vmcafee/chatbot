@@ -103,13 +103,13 @@ class Chat(object):
                 newinput = type+":"+input
             else:
                 newinput=input
-            print "New Input %s" %(newinput)
+            #print "New Input %s" %(newinput)
             match = pattern.match(newinput)
              # did the pattern match?
             if match:
                 print "Inside match"
                 resp = random.choice(response)    # pick a random response
-                print response
+                #print response
                 #print resp
                 resp = self._wildcards(resp, match) # process wildcards
 
@@ -148,7 +148,7 @@ class Chat(object):
                     #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
                     if (len(answer)<20):
-                        print "Answer from wolfram %s" %(answer)
+                        #print "Answer from wolfram %s" %(answer)
                         print self.respond(ques+" "+str(answer), answer,"wolfram:answer")
                     else:
                         print "wolfram"
