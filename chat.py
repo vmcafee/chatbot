@@ -152,37 +152,38 @@ class Chat(object):
                         print self.respond(str(answer),"maths:answer")
                     except:
                         print self.respond(ques,"maths:error")
-                elif(len(c)==0):
-                    #If no mathematical expression then pass question to wolfram alpha
-                    answer =  self.get_fromwolfram(input)
-                    #print len(answer)
-                    if (len(answer)> 0 and len(answer)<50 and "|" not in answer):
-                        #print "Answer from wolfram %s" %(answer)
-                        print self.respond(str(answer),"wolfram:answer")
-                    else:
-                        print "either no wolfram answer or its too long"
-                       # Here start a generic conversation, ask new questions, change topic etc
-                    self.named_entity = self.get_namedentity(input)
-                    #self.named_entity[1] is to get Person named entity
-                    if(self.named_entity[1]):
-                        print self.named_entity[1]
-                        print self.respond(str(" ".join(self.named_entity[1])),"person")
-                    elif(self.named_entity[0]):
-                        #print "found an organization"
-                        #print "ques is: " + ques
-                        print self.respond(str(" ".join(self.named_entity[0][0])),"organization")
-                    elif(self.named_entity[2]):
-                        #print "found a location"
-                        #print "ques is: " + ques
-                        print self.respond(str(" ".join(self.named_entity[2][0])),"location")
-                    elif(self.named_entity[3]):
-                        #print "found a facility"
-                        #print "ques is: " + ques
-                        print self.respond(str(" ".join(self.named_entity[3][0])),"facility")
-                    else:
-                        print self.respond(input,"")
+                #elif(len(c)==0):
+                #If no mathematical expression then pass question to wolfram alpha
+                answer =  self.get_fromwolfram(input)
+                #print len(answer)
+                if (len(answer)> 0 and len(answer)<50 and "|" not in answer):
+                    #print "Answer from wolfram %s" %(answer)
+                    print self.respond(str(answer),"wolfram:answer")
+                else:
+                    print "either no wolfram answer or its too long"
+                   # Here start a generic conversation, ask new questions, change topic etc
+                self.named_entity = self.get_namedentity(input)
+                #self.named_entity[1] is to get Person named entity
+                if(self.named_entity[1]):
+                    print self.named_entity[1]
+                    print self.respond(str(" ".join(self.named_entity[1])),"person")
+                elif(self.named_entity[0]):
+                    #print "found an organization"
+                    #print "ques is: " + ques
+                    print self.respond(str(" ".join(self.named_entity[0][0])),"organization")
+                elif(self.named_entity[2]):
+                    #print "found a location"
+                    #print "ques is: " + ques
+                    print self.named_entity[2][0]
+                    print self.respond(str(" ".join(self.named_entity[2][0])),"location")
+                elif(self.named_entity[3]):
+                    #print "found a facility"
+                    #print "ques is: " + ques
+                    print self.respond(str(" ".join(self.named_entity[3][0])),"facility")
                 else:
                     print self.respond(input,"")
+                #else:
+                    #print self.respond(input,"")
 
     def parse_mathexpression(self,input):
         pattern = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')

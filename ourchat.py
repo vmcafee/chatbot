@@ -16,11 +16,11 @@ pairs = (
      (r'(hi|hello|hey)(.*)',
      ( "hi!!! how r u!!",)),
      (r"repeat:(.*)",
-     ( "You already asked me that!!",
-       "Give me a new question, I already told you that")
+     ( "You already said that!!",
+       "Say something new, we've already talked about that!!")
      ),
     (r"maths:answer:(.*)",
-     ( "Maths!! That's an easy one, the answer is %1",
+     ( "I <3 Math!! That's an easy one, the answer is %1",
        "Hmm.. mathematics, well the answer is %1",
        "Looks like you like math too, the answer is %1")
      ),
@@ -40,24 +40,25 @@ pairs = (
      ),
     (r"organization:(.*)",
      ( "Do you know anyone who works at %1?",
-       "What type of organization is %1?")
+       "What type of organization is %1?",
+       "%1? I've heard of that organization.")
      ),
     (r"person:(.*)",
      ( "How do you know this person, did you say %1?",
        "%1 is a person, what else do you know about this person?")
      ),
     (r"location:(.*)",
-     ( "Have you been to this place??",
-       "Have you been to places near by %1?"
-       "This would be a good place to visit if you haven't already been here")
+     ( "I love %1! Have you been there?",
+       "Have you been to any cool places in %1?",
+       "I hear that's a cool place to visit if you haven't already been there.")
      ),
     (r"facility:(.*)",
      ( "Have you been to this facility??",
-       "%1 is a fmous facility?"
+       "%1 is a famous facility?"
        "This would be a good place to visit if you haven't already been here")
      ),
     (r'I\'m (.*)',
-    ( "ur%1?? that's so cool! kekekekeke ^_^ tell me more!",
+    ( "ur%1? that's great! tell me more!",
       "ur%1? neat!! kekeke >_<")),
     (r'(.*) don\'t you (.*)',
     ( "u think I can%2??! really?? kekeke \<_\<",
@@ -105,11 +106,11 @@ pairs = (
       "maybe!  y shud i tell u?? kekeke >_>")),
 
     (r'who (are|r) (you|u)(.*)',
-    ( "I am Mimi, I'm here to answer your questions!!",
-      "y shud i tell u?? kekeke >_>")),
+    ( "I'm Mimi, I'm here to answer your questions!!",
+      "The question is, who are you?")),
     (r'(.*)name(.*)',
     ( "I am Mimi, I'm here to answer your questions!!",
-      "y shud i tell u?? kekeke >_>")),
+      "Why should I tell u?? kekeke >_>")),
     (r'(.*)(no|yes)(.*)',
     ( "ok, got it! what's your next question",
       "cool, what else do you want to ask me?")),
