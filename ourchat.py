@@ -13,8 +13,10 @@ import chat as c
 
 pairs = (
 
-     (r'(hi|hello|hey)(.*)',
-     ( "hi!!! how r u!!",)),
+     (r'(hi|hello|hey|howdy|what\'s up)(.*)',
+     ( "hi!!! how r u!!",
+      "Hello! how have you been?",
+      "Hi, what's up?")),
      (r"repeat:(.*)",
      ( "You already said that!!",
        "Say something new, we've already talked about that!!")
