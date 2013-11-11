@@ -37,6 +37,8 @@ reflections = {
  "urs"    : "mine"
 }
 
+hist_ques = []
+
 class Chat(object):
     def __init__(self, pairs, reflections={}):
         """
@@ -104,7 +106,7 @@ class Chat(object):
                 newinput = type+":"+input
             else:
                 newinput=input
-            #print "New Input %s" %(newinput)
+            print "New Input %s" %(newinput)
             match = pattern.match(newinput)
              # did the pattern match?
             if match:
@@ -121,7 +123,8 @@ class Chat(object):
 
      # Hold a conversation with a chatbot
     def converse(self, quit="quit"):
-        filterlist = ["hi","how are","how're","hello","hey","hiya","you","me","I am","I","me","they","my","myself"]
+        filterlist = ["hi","how are","how're","hello","hey","hiya","you","me","I am","I","me","they","my","myself","u",
+        "r","i"]
 
         input = ""
         while input != quit:
@@ -133,12 +136,17 @@ class Chat(object):
             if input:
                 while input[-1] in "!.?":
                     input = input[:-1]
-                print self.respond(input,"","")
+                    
+                if input in hist_ques:
+                    print self.respond(input,"","repeat")
+                else:
+                    hist_ques.append(input)
+
+                
                 #Passing input to see of there is an mathematical expression
                 ques,answer = self.parse_mathexpression(input)
                 ques_tokens = ques.split()
-                c = filter(lambda (x): True if x in input.split() else False, filterlist)
-                
+                c = filter(lambda (x): True if x in input.split() else False, filterlist)               
                 if(answer):
                     try:
                         answer = eval(answer)
@@ -149,31 +157,31 @@ class Chat(object):
                     #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
                     print len(answer)
-                    if (len(answer)> 0 and len(answer)<20):
+                    if (len(answer)> 0 and len(answer)<50):
                         #print "Answer from wolfram %s" %(answer)
-                        print self.respond(ques+" "+str(answer), answer,"wolfram:answer")
+                        print self.respond(str(answer), answer,"wolfram:answer")
                     else:
                         print "either no wolfram answer or its too long"
                        # Here start a generic conversation, ask new questions, change topic etc
-                        self.named_entity = self.get_namedentity(input)
-                        #self.named_entity[1] is to get Person named entity
-                        if(self.named_entity[1]):
-                            print self.named_entity[1]
-                            if (answer):
-                                type = "person:answer"
-                            else:
-                                type = "person"
-                            print self.respond(ques+" "+str(answer), answer,"person")
-                        elif(self.named_entity[0]):
-                            print "found an organization"
-                            print "ques is: " + ques
-                            print self.respond(" "+str(self.named_entity[0][0]), "any","organization")
-                        elif(self.named_entity[0]):
-                            print "GPE"
+                    self.named_entity = self.get_namedentity(input)
+                    #self.named_entity[1] is to get Person named entity
+                    if(self.named_entity[1]):
+                        print self.named_entity[1]
+                        if (answer):
+                            type = "person:answer"
                         else:
-                            self.respond(input,"","")
+                            type = "person"
+                        print self.respond(" "+str(answer), answer,"person")
+                    elif(self.named_entity[0]):
+                        print "found an organization"
+                        print "ques is: " + ques
+                        print self.respond(" "+str(self.named_entity[0][0]), "any","organization")
+                    elif(self.named_entity[0]):
+                        print "GPE"
+                    else:
+                        print self.respond(input,"","")
                 else:
-                    self.respond(input,"","")
+                    print self.respond(input,"","")
 
     def parse_mathexpression(self,input):
         pattern = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')
