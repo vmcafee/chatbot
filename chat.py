@@ -156,7 +156,7 @@ class Chat(object):
                     #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
                     #print len(answer)
-                    if (len(answer)> 0 and len(answer)<50):
+                    if (len(answer)> 0 and len(answer)<50 and "|" not in answer):
                         #print "Answer from wolfram %s" %(answer)
                         print self.respond(str(answer),"wolfram:answer")
                     else:
