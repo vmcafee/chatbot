@@ -148,11 +148,12 @@ class Chat(object):
                 elif(len(c)==0):
                     #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
-                    if (len(answer)<20):
+                    print len(answer)
+                    if (len(answer)> 0 and len(answer)<20):
                         #print "Answer from wolfram %s" %(answer)
                         print self.respond(ques+" "+str(answer), answer,"wolfram:answer")
                     else:
-                        print "wolfram"
+                        print "either no wolfram answer or its too long"
                        # Here start a generic conversation, ask new questions, change topic etc
                         self.named_entity = self.get_namedentity(input)
                         #self.named_entity[1] is to get Person named entity
@@ -164,7 +165,9 @@ class Chat(object):
                                 type = "person"
                             print self.respond(ques+" "+str(answer), answer,"person")
                         elif(self.named_entity[0]):
-                            print "organization"
+                            print "found an organization"
+                            print "ques is: " + ques
+                            print self.respond(" "+str(self.named_entity[0][0]), "any","organization")
                         elif(self.named_entity[0]):
                             print "GPE"
                         else:

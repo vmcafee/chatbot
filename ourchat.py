@@ -19,18 +19,18 @@ import chat as c
 pairs = (
     # suggestions
     (r"maths:what is(.*)",
-     ( "That's an easy one, answer is %1",
-       "Hmm.. mathematics, well the answer is %1")),
+     ( "That's an easy one, the answer is %1",
+       "Hmm.. mathematics, well the answer is %1",
+       "Looks like you like math too, the answer is %1",
+       "And the answer is %1" )
+     ),
     (r"maths:tell me what is(.*)",
      ( "Looks like you like maths, the answer is %1",
        "And the answer is %1")
      ),
-    (r"maths:what is(.*)",
-     ( "Looks like you like maths, the answer is %1",
-       "And the answer is %1")
-     ),
     (r"maths:evaluate(.*)",
-     ( "Ok I evaluated the question and I found that the answer is %1")
+     ( "Ok I evaluated the question and I found that the answer is %1",
+       "That evaluates to %1")
      ),
     (r"maths:(.*)",
      ( "You're lazy, you just typed the expression or you didn't type the text correctly, answer is %1 ",
@@ -54,8 +54,8 @@ pairs = (
        "Dumb ass I won't tell you the answer! Ask me something else")
      ),
     (r"organization:(.*) ",
-     ( "Looks like you didn't type the question correctly, try again may be!!",
-       "Dumb ass I won't tell you the answer! Ask me something else")
+     ( "Do you know anyone who works at %1?",
+       "What type of organization is %1?")
      ),
     (r"person:answer(.*) ",
      ( "See I got the information for you %1, looks like you like this person, why?",
@@ -98,7 +98,7 @@ pairs = (
     ( "do i%2? only on tuesdays! kekeke *_*",
       "i dunno! do u%2??")),
 
-    (r'(.*)\?',
+    (r'(.*)',
     ( "man u ask lots of questions!",
       "booooring! how old r u??",
       "boooooring!! ur not very fun")),
@@ -151,7 +151,7 @@ pairs = (
 chatbot = c.Chat(pairs, nltk.chat.eliza.reflections)
 
 def dog_chat():
-    print "Emoting cutely ..."
+    print "Hi there! I'm Mimi and I like solving math problems. Ask me something."
     chatbot.converse()
 
 def demo():
