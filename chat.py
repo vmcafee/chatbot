@@ -11,7 +11,8 @@ import string
 import re
 import random
 import nltk
-import BeautifulSoup
+#import BeautifulSoup #this line doesn't work for Vanessa
+from bs4 import BeautifulSoup
 import urllib2
 import nltk
 
@@ -91,7 +92,7 @@ class Chat(object):
          return response
 
     #Passing type here to give relevant reponses back
-    def respond(self, input, answer, type):
+    def respond(self, input, answer, qtype):
         """
 
 
@@ -99,8 +100,8 @@ class Chat(object):
          # check each pattern
         for (pattern, response) in self._pairs:
             #Adding type to the input
-            if(type):
-                newinput = type+":"+input
+            if(qtype):
+                newinput = qtype+":"+input
             else:
                 newinput=input
             #print "New Input %s" %(newinput)
@@ -186,7 +187,8 @@ class Chat(object):
         url  = 'http://api.wolframalpha.com/v2/query?appid=UAGAWR-3X6Y8W777Q&input='+input.replace(" ","%20")+'&format=plaintext'
         print url
         data = urllib2.urlopen(url).read()  
-        soup = BeautifulSoup.BeautifulSoup(data)
+        #soup = BeautifulSoup.BeautifulSoup(data)  ## changed to work for Vanessa's import statement
+        soup = BeautifulSoup(data)
         keys = soup.findAll('plaintext')
         if (keys):
             #Printing the first returned rresult of the query. The first result is the heading, second
