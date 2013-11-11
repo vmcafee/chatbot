@@ -146,7 +146,13 @@ pairs = (
     ( "mom says i have to go eat dinner now :,( bye!!",
       "awww u have to go?? see u next time!!",
       "how to see u again soon! ^_^"))
-    )
+    ),
+    (r'(.*)',
+    ( "ur funny! kekeke",
+      "boooooring! talk about something else! tell me wat u like!",
+      "do u like anime??",
+      "do u watch anime? i like sailor moon! ^_^",
+      "i wish i was a kitty!! kekekeke ^_^"))
 
 chatbot = c.Chat(pairs, nltk.chat.eliza.reflections)
 
