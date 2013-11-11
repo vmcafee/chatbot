@@ -1,16 +1,11 @@
-# Natural Language Toolkit: Eliza
+# Natural Language Toolkit: Mimi
 #
-# Copyright (C) 2001-2013 NLTK Project
-# Authors: Steven Bird <stevenbird1@gmail.com>
-#          Edward Loper <edloper@gmail.com>
-# URL: <http://nltk.org/>
-# For license information, see LICENSE.TXT
+# 
+# Authors: Sonali Sharma
+#          Vanessa McAfee
 
 # Based on an Eliza implementation by Joe Strout <joe@strout.net>,
 # Jeff Epler <jepler@inetnebr.com> and Jez Higgins <mailto:jez@jezuk.co.uk>.
-
-# a translation table used to convert things you say into things the
-# computer says back, e.g. "I am" --> "you are"
 
 import nltk
 import chat as c
@@ -138,12 +133,12 @@ pairs = (
   
 chatbot = c.Chat(pairs, nltk.chat.eliza.reflections)
 
-def dog_chat():
+def mimi_chat():
     print "Hi there! I'm Mimi and I like answering questions. Ask me something."
     chatbot.converse()
 
 def demo():
-    dog_chat()
+    mimi_chat()
 
 if __name__ == "__main__":
     demo()
