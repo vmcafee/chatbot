@@ -30,7 +30,10 @@ reflections = {
  "your"   : "my",
  "yours"  : "mine",
  "you"    : "me",
- "me"     : "you"
+ "me"     : "you",
+ "u"      : "me",
+ "ur"     : "my",
+ "urs"    : "mine"
 }
 
 class Chat(object):
@@ -96,10 +99,12 @@ class Chat(object):
          # check each pattern
         for (pattern, response) in self._pairs:
             #Adding type to the input
-            newinput = type+":"+input
+            if(type):
+                newinput = type+":"+input
+            else:
+                newinput=input
             print "New Input %s" %(newinput)
             match = pattern.match(newinput)
-
              # did the pattern match?
             if match:
                 print "Inside match"
@@ -115,6 +120,8 @@ class Chat(object):
 
      # Hold a conversation with a chatbot
     def converse(self, quit="quit"):
+        filterlist = ["hi","how are","how're","hello","hey","hiya","you","me","I am","I","me","they","my","myself"]
+
         input = ""
         while input != quit:
             input = quit
@@ -125,34 +132,44 @@ class Chat(object):
             if input:
                 while input[-1] in "!.?":
                     input = input[:-1]
+                print self.respond(input,"","")
                 #Passing input to see of there is an mathematical expression
                 ques,answer = self.parse_mathexpression(input)
+                ques_tokens = ques.split()
+                c = filter(lambda (x): True if x in input.split() else False, filterlist)
+                
                 if(answer):
                     try:
                         answer = eval(answer)
                         print self.respond(ques+" "+str(answer), answer,"maths")
                     except:
                         print self.respond(ques+" "+str(answer), answer,"maths:error")
-                else:
+                elif(len(c)==0):
                     #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
-                    if (answer):
+                    if (len(answer)<20):
                         print "Answer from wolfram %s" %(answer)
-                        #Now check the named entity in the question
-                        self.named_entity = self.get_namedentity(input)
+                        print self.respond(ques+" "+str(answer), answer,"wolfram:answer")
                     else:
-                        print "wolfram else"
+                        print "wolfram"
                        # Here start a generic conversation, ask new questions, change topic etc
-                self.named_entity = self.get_namedentity(input)
-
-                #self.named_entity[3] is to get Person named entity
-                if(self.named_entity[1]):
-                    print self.named_entity[1]
-                    if (answer):
-                        type = "person:answer"
-                    else:
-                        type = "person"
-                    print self.respond(ques+" "+str(answer), answer,"person")
+                        self.named_entity = self.get_namedentity(input)
+                        #self.named_entity[1] is to get Person named entity
+                        if(self.named_entity[1]):
+                            print self.named_entity[1]
+                            if (answer):
+                                type = "person:answer"
+                            else:
+                                type = "person"
+                            print self.respond(ques+" "+str(answer), answer,"person")
+                        elif(self.named_entity[0]):
+                            print "organization"
+                        elif(self.named_entity[0]):
+                            print "GPE"
+                        else:
+                            self.respond(input,"","")
+                else:
+                    self.respond(input,"","")
 
     def parse_mathexpression(self,input):
         pattern = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')
