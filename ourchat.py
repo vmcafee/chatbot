@@ -49,7 +49,7 @@ pairs = (
      ),
     (r"person:(.*)",
      ( "How do you know this person, did you say %1?",
-       "He is a person, what else do you know about this person?")
+       "%1 is a person, what else do you know about this person?")
      ),
     (r"location:(.*)",
      ( "Have you been to this place??",
@@ -115,6 +115,9 @@ pairs = (
     (r'(.*)name(.*)',
     ( "I am Mimi, I'm here to answer your questions!!",
       "y shud i tell u?? kekeke >_>")),
+    (r'(.*)(no|yes)(.*)',
+    ( "ok, got it! what's your next question",
+      "cool, what else do you want to ask me?")),
 
     (r'quit',
     ( "mom says i have to go eat dinner now :,( bye!!",
