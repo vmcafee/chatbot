@@ -92,7 +92,7 @@ class Chat(object):
          return response
 
     #Passing type here to give relevant reponses back
-    def respond(self, input, answer, qtype):
+    def respond(self, input, answer, type):
         """
 
 
@@ -100,8 +100,8 @@ class Chat(object):
          # check each pattern
         for (pattern, response) in self._pairs:
             #Adding type to the input
-            if(qtype):
-                newinput = qtype+":"+input
+            if(type):
+                newinput = type+":"+input
             else:
                 newinput=input
             #print "New Input %s" %(newinput)
