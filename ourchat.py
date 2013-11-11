@@ -37,7 +37,7 @@ pairs = (
      ( "Why do you ask? I will still tell you %1")
      ),
     (r"wolfram:answer:(.*)",
-     ( "%1",
+     ( "Good question!! the answer is, %1",
       "I found it for you, %1")
      ),
     (r"organization:(.*)",
@@ -129,7 +129,8 @@ pairs = (
      "hee u think im gonna tell u? .v.",
      "booooooooring! ask me somethin else!")),
     (r'(.*)',
-    ( "man u talk a lot!!!",
+    ( "Man u talk a lot!!!",
+      "Is that a question?",
       "I don't feel like talking anymore",
       "boooooring!! ur not very fun")),
     )

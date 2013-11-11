@@ -102,7 +102,7 @@ class Chat(object):
                 newinput = type+":"+input
             else:
                 newinput=input
-            print "New Input %s" %(newinput)
+            #print "New Input %s" %(newinput)
             match = pattern.match(newinput)
              # did the pattern match?
             if match:
@@ -156,11 +156,12 @@ class Chat(object):
                 #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
                     #print len(answer)
-                    if (len(answer)> 0 and len(answer)<50 and "|" not in answer):
+                    if (len(answer)> 0 and len(answer)<80):
                         #print "Answer from wolfram %s" %(answer)
                         print self.respond(str(answer),"wolfram:answer")
                     else:
-                        print "either no wolfram answer or its too long"
+                        pass
+                        #print "either no wolfram answer or its too long"
                        # Here start a generic conversation, ask new questions, change topic etc
                 self.named_entity = self.get_namedentity(input)
                 #self.named_entity[1] is to get Person named entity
@@ -196,9 +197,9 @@ class Chat(object):
             return "",""
 
     def get_fromwolfram(self, input):
-        print "Inside wolfram"
+        #print "Inside wolfram"
         url  = 'http://api.wolframalpha.com/v2/query?appid=UAGAWR-3X6Y8W777Q&input='+input.replace(" ","%20")+'&format=plaintext'
-        print url
+        #print url
         data = urllib2.urlopen(url).read()  
         #soup = BeautifulSoup.BeautifulSoup(data)  ## changed to work for Vanessa's import statement
         soup = BeautifulSoup(data)
@@ -217,11 +218,11 @@ class Chat(object):
         self.personlist = []
         self.gpelist = []
         self.facilitylist = []
-        print input
+        #print input
         text = nltk.pos_tag(input.split())
-        print text
+        #print text
         out = nltk.ne_chunk(text)
-        print out
+        #print out
         for chunk in out:
             if hasattr(chunk,'node'):
                 if chunk.node =='ORGANIZATION':
@@ -236,5 +237,5 @@ class Chat(object):
                 if chunk.node =='FACILITY':
                     facility = ' '.join([c[0] for c in chunk.leaves()])
                     self.facilitylist.append(facility)
-        print [self.orglist, self.personlist, self.gpelist,self.facilitylist]
+        #print [self.orglist, self.personlist, self.gpelist,self.facilitylist]
         return [self.orglist, self.personlist, self.gpelist,self.facilitylist]
