@@ -24,25 +24,17 @@ pairs = (
      ( "You already asked me that!!",
        "Give me a new question, I already told you that")
      ),
-    (r"maths:what is(.*)",
-     ( "That's an easy one, the answer is %1",
+    (r"maths:answer:(.*)",
+     ( "Maths!! That's an easy one, the answer is %1",
        "Hmm.. mathematics, well the answer is %1",
        "Looks like you like math too, the answer is %1",
        "And the answer is %1" )
      ),
-    (r"maths:tell me what is(.*)",
-     ( "Looks like you like maths, the answer is %1",
-       "And the answer is %1")
+     (r"maths:error:(.*)",
+     ( "Looks like a mathematics question but you haven't framed it correctly",
+       "Hmm.. mathematics, but check you expression again")
      ),
-    (r"maths:evaluate(.*)",
-     ( "Ok I evaluated the question and I found that the answer is %1",
-       "That evaluates to %1")
-     ),
-    (r"maths:(.*)",
-     ( "You're lazy, you just typed the expression or you didn't type the text correctly, answer is %1 ",
-       "you got it! the answer is %1")
-     ),
-     (r"wolfram:answer: what is(.*)",
+     (r"wolfram:answer:what is(.*)",
      ( "That's an easy one, answer is %1",
        "I got an answer for you!  %1")),
     (r"wolfram:answer: who is(.*)",
@@ -52,35 +44,23 @@ pairs = (
      ( "%1",
       "I found it for you, %1")
      ),
-    (r"wolfram:answer tell me(.*)",
-     ( "Ok I evaluated the question and I found that the answer is %1")
-     ),
-    (r"maths:(.*)",
-     ( "You're lazy, you just typed the expression or you didn't type the text correctly, answer is %1 ",
-       "you got it! the answer is %1")
-     ),
-    (r"organization:answer: (.*) ",
-     ( "Looks like you didn't type the question correctly, try again may be!!",
-       "I won't tell you the answer! Ask me something else")
-     ),
-    (r"organization: (.*) ",
+    (r"organization:(.*)",
      ( "Do you know anyone who works at %1?",
        "What type of organization is %1?")
      ),
-    (r"person:answer: (.*) ",
-     ( "See I got the information for you %1, looks like you like this person, why?",
-       "Let's see, this person is %1, who else do you want to know about ")),
-    (r"person: (.*) ",
-     ( "I have no clue who this person is, why do you ask?",
-       "I won't tell you the answer who is this person is! Ask me something else")
+    (r"person:(.*)",
+     ( "How do you know this person, did you say %1?",
+       "He is a person, what else do you know about this person?")
      ),
-    (r"location:answer:(.*) ",
-     ( "Looks like you didn't type the question correctly, try again may be!!",
-       "I won't tell you the answer! Ask me something else")
+    (r"location:(.*)",
+     ( "Have you been to this place??",
+       "Have you been to places near by %1?"
+       "This would be a good place to visit if you haven't already been here")
      ),
-    (r"location:(.*) ",
-     ( "Looks like you didn't type the question correctly, try again may be!!",
-       "Dumb ass I won't tell you the answer! Ask me something else")
+    (r"facility:(.*)",
+     ( "Have you been to this facility??",
+       "%1 is a fmous facility?"
+       "This would be a good place to visit if you haven't already been here")
      ),
     (r'I\'m (.*)',
     ( "ur%1?? that's so cool! kekekekeke ^_^ tell me more!",
@@ -148,8 +128,8 @@ pairs = (
      "hee u think im gonna tell u? .v.",
      "booooooooring! ask me somethin else!")),
     (r'(.*)',
-    ( "man u ask lots of questions!",
-      "booooring! how old r u??",
+    ( "man u talk a lot!!!",
+      "I don't feel like talking anymore",
       "boooooring!! ur not very fun")),
     )
   

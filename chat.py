@@ -94,7 +94,7 @@ class Chat(object):
          return response
 
     #Passing type here to give relevant reponses back
-    def respond(self, input, answer, type):
+    def respond(self, input, type):
         """
 
 
@@ -102,6 +102,8 @@ class Chat(object):
          # check each pattern
         for (pattern, response) in self._pairs:
             #Adding type to the input
+            print "type"
+            print type
             if(type):
                 newinput = type+":"+input
             else:
@@ -136,9 +138,12 @@ class Chat(object):
             if input:
                 while input[-1] in "!.?":
                     input = input[:-1]
-                    
+                #Checking if the question was already asked
+                print "hist_ques"
+                print hist_ques
+
                 if input in hist_ques:
-                    print self.respond(input,"","repeat")
+                    print self.respond(input,"repeat")
                 else:
                     hist_ques.append(input)
 
@@ -150,16 +155,16 @@ class Chat(object):
                 if(answer):
                     try:
                         answer = eval(answer)
-                        print self.respond(ques+" "+str(answer), answer,"maths")
+                        print self.respond(str(answer),"maths:answer")
                     except:
-                        print self.respond(ques+" "+str(answer), answer,"maths:error")
+                        print self.respond(ques,"maths:error")
                 elif(len(c)==0):
                     #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
                     print len(answer)
                     if (len(answer)> 0 and len(answer)<50):
                         #print "Answer from wolfram %s" %(answer)
-                        print self.respond(str(answer), answer,"wolfram:answer")
+                        print self.respond(str(answer),"wolfram:answer")
                     else:
                         print "either no wolfram answer or its too long"
                        # Here start a generic conversation, ask new questions, change topic etc
@@ -167,21 +172,23 @@ class Chat(object):
                     #self.named_entity[1] is to get Person named entity
                     if(self.named_entity[1]):
                         print self.named_entity[1]
-                        if (answer):
-                            type = "person:answer"
-                        else:
-                            type = "person"
-                        print self.respond(" "+str(answer), answer,"person")
+                        print self.respond(str(" ".join(self.named_entity[1])),"person")
                     elif(self.named_entity[0]):
                         print "found an organization"
                         print "ques is: " + ques
-                        print self.respond(" "+str(self.named_entity[0][0]), "any","organization")
-                    elif(self.named_entity[0]):
-                        print "GPE"
+                        print self.respond(str(" ".join(self.named_entity[0][0])),"organization")
+                    elif(self.named_entity[2]):
+                        print "found a location"
+                        print "ques is: " + ques
+                        print self.respond(str(" ".join(self.named_entity[2][0])),"location")
+                    elif(self.named_entity[3]):
+                        print "found a facility"
+                        print "ques is: " + ques
+                        print self.respond(str(" ".join(self.named_entity[3][0])),"facility")
                     else:
-                        print self.respond(input,"","")
+                        print self.respond(input,"")
                 else:
-                    print self.respond(input,"","")
+                    print self.respond(input,"")
 
     def parse_mathexpression(self,input):
         pattern = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')
@@ -214,6 +221,7 @@ class Chat(object):
         self.orglist = []
         self.personlist = []
         self.gpelist = []
+        self.facilitylist = []
         print input
         text = nltk.pos_tag(input.split())
         print text
@@ -230,8 +238,11 @@ class Chat(object):
                 if chunk.node =='GSP' or chunk.node =='GPE' :
                     gpe = ' '.join([c[0] for c in chunk.leaves()])
                     self.gpelist.append(gpe)
-        print [self.orglist, self.personlist, self.gpelist]
-        return [self.orglist, self.personlist, self.gpelist]
+                if chunk.node =='FACILITY':
+                    facility = ' '.join([c[0] for c in chunk.leaves()])
+                    self.facilitylist.append(facility)
+        print [self.orglist, self.personlist, self.gpelist,self.facilitylist]
+        return [self.orglist, self.personlist, self.gpelist,self.facilitylist]
 
 
     def parse_entity(self,input):
