@@ -1,11 +1,11 @@
-# Natural Language Toolkit: Chatbot Utilities
+# Natural Language Toolkit: Mimi
 #
-# Authors: Steven Bird <sb@csse.unimelb.edu.au>
-# URL: <http://www.nltk.org/>
-# For license information, see LICENSE.TXT
+# 
+# Authors: Sonali Sharma
+#          Vanessa McAfee
 
 # Based on an Eliza implementation by Joe Strout <joe@strout.net>,
-# Jeff Epler <jepler@inetnebr.com> and Jez Higgins <jez@jezuk.co.uk>.
+# Jeff Epler <jepler@inetnebr.com> and Jez Higgins <mailto:jez@jezuk.co.uk>.
 
 import string
 import re
