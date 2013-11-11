@@ -27,8 +27,7 @@ pairs = (
     (r"maths:answer:(.*)",
      ( "Maths!! That's an easy one, the answer is %1",
        "Hmm.. mathematics, well the answer is %1",
-       "Looks like you like math too, the answer is %1",
-       "And the answer is %1" )
+       "Looks like you like math too, the answer is %1")
      ),
      (r"maths:error:(.*)",
      ( "Looks like a mathematics question but you haven't framed it correctly",
@@ -84,7 +83,6 @@ pairs = (
     ( "i dunno! y u askin me for!",
       "try harder, silly! hee! ^_^",
       "i dunno! but when i can't%1 i jump up and down!")),
-
     (r'I can\'t (.*)',
     ( "u can't what??! >_<",
       "that's ok! i can't%1 either! kekekekeke ^_^",
@@ -114,7 +112,9 @@ pairs = (
     (r'who (are|r) (you|u)(.*)',
     ( "I am Mimi, I'm here to answer your questions!!",
       "y shud i tell u?? kekeke >_>")),
-
+    (r'(.*)name(.*)',
+    ( "I am Mimi, I'm here to answer your questions!!",
+      "y shud i tell u?? kekeke >_>")),
 
     (r'quit',
     ( "mom says i have to go eat dinner now :,( bye!!",

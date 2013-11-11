@@ -95,24 +95,18 @@ class Chat(object):
 
     #Passing type here to give relevant reponses back
     def respond(self, input, type):
-        """
-
-
-        """
          # check each pattern
         for (pattern, response) in self._pairs:
             #Adding type to the input
-            print "type"
-            print type
             if(type):
                 newinput = type+":"+input
             else:
                 newinput=input
-            print "New Input %s" %(newinput)
+            #print "New Input %s" %(newinput)
             match = pattern.match(newinput)
              # did the pattern match?
             if match:
-                print "Inside match"
+                #print "Inside match"
                 resp = random.choice(response)    # pick a random response
                 #print response
                 #print resp
@@ -126,7 +120,7 @@ class Chat(object):
      # Hold a conversation with a chatbot
     def converse(self, quit="quit"):
         filterlist = ["hi","how are","how're","hello","hey","hiya","you","me","I am","I","me","they","my","myself","u",
-        "r","i"]
+        "r","i","your","you're","i'm"]
 
         input = ""
         while input != quit:
@@ -139,8 +133,6 @@ class Chat(object):
                 while input[-1] in "!.?":
                     input = input[:-1]
                 #Checking if the question was already asked
-                print "hist_ques"
-                print hist_ques
 
                 if input in hist_ques:
                     print self.respond(input,"repeat")
@@ -150,8 +142,10 @@ class Chat(object):
                 
                 #Passing input to see of there is an mathematical expression
                 ques,answer = self.parse_mathexpression(input)
-                ques_tokens = ques.split()
-                c = filter(lambda (x): True if x in input.split() else False, filterlist)               
+                ques_tokens = input.lower().split()
+
+                c = filter(lambda (x): True if x.lower() in ques_tokens else False, filterlist)  
+
                 if(answer):
                     try:
                         answer = eval(answer)
@@ -161,7 +155,7 @@ class Chat(object):
                 elif(len(c)==0):
                     #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
-                    print len(answer)
+                    #print len(answer)
                     if (len(answer)> 0 and len(answer)<50):
                         #print "Answer from wolfram %s" %(answer)
                         print self.respond(str(answer),"wolfram:answer")
@@ -174,16 +168,16 @@ class Chat(object):
                         print self.named_entity[1]
                         print self.respond(str(" ".join(self.named_entity[1])),"person")
                     elif(self.named_entity[0]):
-                        print "found an organization"
-                        print "ques is: " + ques
+                        #print "found an organization"
+                        #print "ques is: " + ques
                         print self.respond(str(" ".join(self.named_entity[0][0])),"organization")
                     elif(self.named_entity[2]):
-                        print "found a location"
-                        print "ques is: " + ques
+                        #print "found a location"
+                        #print "ques is: " + ques
                         print self.respond(str(" ".join(self.named_entity[2][0])),"location")
                     elif(self.named_entity[3]):
-                        print "found a facility"
-                        print "ques is: " + ques
+                        #print "found a facility"
+                        #print "ques is: " + ques
                         print self.respond(str(" ".join(self.named_entity[3][0])),"facility")
                     else:
                         print self.respond(input,"")
