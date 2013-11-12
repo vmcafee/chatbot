@@ -17,6 +17,7 @@ import urllib2
 import nltk
 
 
+
 reflections = {
  "am"     : "are",
  "was"    : "were",
@@ -38,6 +39,7 @@ reflections = {
 }
 
 hist_ques = []
+hist_topics = []
 
 class Chat(object):
     def __init__(self, pairs, reflections={}):
@@ -139,7 +141,6 @@ class Chat(object):
                 else:
                     hist_ques.append(input)
 
-                
                 #Passing input to see of there is an mathematical expression
                 ques,answer = self.parse_mathexpression(input)
                 ques_tokens = input.lower().split()
@@ -155,36 +156,35 @@ class Chat(object):
                 elif(len(c)==0):
                 #If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
-                    #print len(answer)
+
                     if (len(answer)> 0 and len(answer)<80):
                         #print "Answer from wolfram %s" %(answer)
                         print self.respond(str(answer),"wolfram:answer")
                     else:
                         pass
                         #print "either no wolfram answer or its too long"
-                       # Here start a generic conversation, ask new questions, change topic etc
+                # Here start a generic conversation, ask new questions, change topic etc
+
                 self.named_entity = self.get_namedentity(input)
-                #self.named_entity[1] is to get Person named entity
+                print hist_topics
+
+
                 if(self.named_entity[1]):
                     print self.named_entity[1]
                     print self.respond(str("".join(self.named_entity[1])),"person")
                 elif(self.named_entity[0]):
-                    #print "found an organization"
-                    #print "ques is: " + ques
                     print self.respond(str("".join(self.named_entity[0][0])),"organization")
                 elif(self.named_entity[2]):
-                    #print "found a location"
-                    #print "ques is: " + ques
                     print self.named_entity[2][0]
                     print self.respond(str("".join(self.named_entity[2][0])),"location")
                 elif(self.named_entity[3]):
-                    #print "found a facility"
-                    #print "ques is: " + ques
                     print self.respond(str("".join(self.named_entity[3][0])),"facility")
                 else:
-                    print self.respond(input,"")
-                #else:
-                    #print self.respond(input,"")
+                    if len(hist_topics)>5:
+                        oldtopic = random.choice(hist_topics)
+                        print self.respond(oldtopic[0],"oldtopic")
+                    else:
+                        print self.respond(input,"")
 
     def parse_mathexpression(self,input):
         pattern = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')
@@ -218,11 +218,16 @@ class Chat(object):
         self.personlist = []
         self.gpelist = []
         self.facilitylist = []
-        #print input
+
         text = nltk.pos_tag(input.split())
-        #print text
+
+        #get nouns from input
+        nouns = [x for x in text if x[1][0] == 'N']
+        for noun in nouns:
+            hist_topics.append(noun)
+
         out = nltk.ne_chunk(text)
-        #print out
+
         for chunk in out:
             if hasattr(chunk,'node'):
                 if chunk.node =='ORGANIZATION':
@@ -237,5 +242,5 @@ class Chat(object):
                 if chunk.node =='FACILITY':
                     facility = ' '.join([c[0] for c in chunk.leaves()])
                     self.facilitylist.append(facility)
-        #print [self.orglist, self.personlist, self.gpelist,self.facilitylist]
+
         return [self.orglist, self.personlist, self.gpelist,self.facilitylist]

@@ -59,6 +59,10 @@ pairs = (
        "%1 is a famous facility?"
        "This would be a good place to visit if you haven't already been here")
      ),
+    (r"oldtopic:(.*)",
+     ( "Let's talk more about %1",
+       "You seem to like talking about %1, tell me more.")
+     ),
     (r'I\'m (.*)',
     ( "ur%1? that's great! tell me more!",
       "ur%1? neat!! kekeke >_<")),
@@ -138,7 +142,7 @@ pairs = (
 chatbot = c.Chat(pairs, nltk.chat.eliza.reflections)
 
 def mimi_chat():
-    print "Hi there! I'm Mimi and I like answering questions. Ask me something."
+    print "Hi there! I'm Mimi and I like answering questions. Ask me something. I can solve math problems and like chatting about people and places."
     chatbot.converse()
 
 def demo():
