@@ -94,7 +94,7 @@ class Chat(object):
     def respond(self, input, type):
          # check each pattern
         for (pattern, response) in self._pairs:
-            #Add type to the input
+            #Add type to the input, this is to detect the correct response
             if(type):
                 newinput = type+":"+input
             else:
@@ -113,9 +113,11 @@ class Chat(object):
 
      # Conversation method
     def converse(self, quit="quit"):
-        
+        #This is the list of words that appear commonly in greetings and generic conversation. This list is to prevent
+        #such sentences from going to wolfram api
         filterlist = ["hi","how are","how're","hello","hey","hiya","howdy","you","me","I am","I","me","they","my","myself","u",
-        "r","i","your","you're","i'm"]
+        "r","i","your","you're","i'm","yes","no","ok","bye","i'll","will","were","thanks","bad","great","good","wonderful",
+        "morning","night","nice","awesome","this"]
 
         input = ""
         while input != quit:
@@ -155,15 +157,18 @@ class Chat(object):
 
                     except:
                         print self.respond(ques,"maths:error")
-                elif(len(c)==0): #
-                # If no mathematical expression then pass question to wolfram alpha
+                elif(len(c)==0 and len(ques_tokens)>=3): #
+                # If no mathematical expression then pass question to wolfram alpha, to get a specific answer
+                # wolfram is only to ftech specific factual answers. Responses are constructed around the factual
+                #answer received from wolfram
                     answer =  self.get_fromwolfram(input)
+                    answer = answer.strip()
 
                     if (len(answer)> 0 and len(answer)<80):
-                    # If wolfram has a short answer
+                    # If wolfram has a short factual answer
                         print self.respond(str(answer),"wolfram:answer")
                     else:
-                        pass
+                        print self.respond("","wolfram:noanswer")
 
                 # Start a generic conversation, ask new questions, change topic etc.
 
@@ -183,7 +188,7 @@ class Chat(object):
                     else:
                         # If can't find named entity, converse about a previous topic/noun.
                         if len(hist_topics)>5:
-                            print hist_topics
+                            #print hist_topics
                             oldtopic = random.choice(hist_topics)
                             print self.respond(oldtopic[0],"oldtopic")
                         else:
@@ -193,12 +198,14 @@ class Chat(object):
 
     # Parses math expressions to evaluate
     def parse_mathexpression(self,input):
-        pattern = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')
-        match =  pattern.match(input)
-        if match:
-            m =  match.group(2)
+        pattern1 = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')
+        pattern2 = re.compile('.*([+/*-/%]+).*')
+        match1 =  pattern1.match(input)
+        match2 =  pattern2.match(input)
+        if match1 and match2:
+            m =  match1.group(2)
             output = m.translate(string.maketrans("",""), '!"#$&\'(),:;<=>?@[\\]_`|~')
-            return (match.group(1),output)
+            return (match1.group(1),output)
         else:
             return "",""
 
