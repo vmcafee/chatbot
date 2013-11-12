@@ -129,16 +129,10 @@ pairs = (
     ( "mom says i have to go eat dinner now :,( bye!!",
       "awww u have to go?? see u next time!!",
       "how to see u again soon! ^_^")),
-    (r'(what|why|how)(.*)',
-    (
-     "I have no clue, try looking it up on wikipedia!",
-     "Did you say what is %1",
-     "well I don't know yet but I will find out for you! Next question please",
-     "hee u think im gonna tell u? .v.",
-     "booooooooring! ask me somethin else!")),
     (r'(.*)',
-    ( "Man u talk a lot!!!",
+    ( "Man u talk a lot!! Ask me a question.",
       "Is that a question?",
+      "I'm good at math ask me something!",
       "Haha you're fun!")),
     )
   
