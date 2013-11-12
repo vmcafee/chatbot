@@ -38,30 +38,25 @@ reflections = {
  "urs"    : "mine"
 }
 
-hist_ques = []
-hist_topics = []
+hist_ques = []      # stores the user's statements and questions
+hist_topics = []    # stores previous conversation topics (list of nouns)
 
 class Chat(object):
     def __init__(self, pairs, reflections={}):
         """
         Initialize the chatbot.  Pairs is a list of patterns and
-        responses.  Each
-                 pattern is a regular expression matching the user's statement
-        or question,
-                 e.g. r'I like (.*)'.  For each such pattern a list of
-        possible responses
-                 is given, e.g. ['Why do you like %1', 'Did you ever dislike
-        %1'].  Material
-                 which is matched by parenthesized sections of the patterns
-        (e.g. .*) is mapped to
-                 the numbered positions in the responses, e.g. %1.
+        responses.  Each pattern is a regular expression matching the user's
+        statement or question, e.g. r'I like (.*)'.  For each such pattern a list of
+        possible responses is given, e.g. ['Why do you like %1', 'Did you ever dislike
+        %1'].  Material which is matched by parenthesized sections of the patterns
+        (e.g. .*) is mapped to the numbered positions in the responses, e.g. %1.
 
-                 @type pairs: C{list} of C{tuple}
-                 @param pairs: The patterns and responses
-                 @type reflections: C{dict}
-                 @param reflections: A mapping between first and second person
-        expressions
-                 @rtype: C{None}
+            @type pairs: C{list} of C{tuple}
+            @param pairs: The patterns and responses
+            @type reflections: C{dict}
+            @param reflections: A mapping between first and second person
+            expressions
+            @rtype: C{None}
         """
 
         self._pairs = [(re.compile(x, re.IGNORECASE),y) for (x,y) in pairs]
@@ -69,49 +64,46 @@ class Chat(object):
 
      # bug: only permits single word expressions to be mapped
     def _substitute(self, str):
-         """
-         Substitute words in the string, according to the specified reflections,
-         e.g. "I'm" -> "you are"
+        """
+        Substitute words in the string, according to the specified reflections,
+        e.g. "I'm" -> "you are"
 
-         @type str: C{string}
-         @param str: The string to be mapped
-         @rtype: C{string}
-         """
+        @type str: C{string}
+        @param str: The string to be mapped
+        @rtype: C{string}
+        """
 
-         words = ""
-         for word in string.split(string.lower(str)):
-             if self._reflections.has_key(word):
-                 word = self._reflections[word]
-             words += ' ' + word
-         return words
+        words = ""
+        for word in string.split(string.lower(str)):
+            if self._reflections.has_key(word):
+                word = self._reflections[word]
+            words += ' ' + word
+        return words
 
     def _wildcards(self, response, match):
-         pos = string.find(response,'%')
-         while pos >= 0:
-             num = string.atoi(response[pos+1:pos+2])
-             response = response[:pos] + \
-                 self._substitute(match.group(num)) + \
-                 response[pos+2:]
-             pos = string.find(response,'%')
-         return response
+        pos = string.find(response,'%')
+        while pos >= 0:
+            num = string.atoi(response[pos+1:pos+2])
+            response = response[:pos] + \
+                self._substitute(match.group(num)) + \
+                response[pos+2:]
+            pos = string.find(response,'%')
+        return response
 
-    #Passing type here to give relevant reponses back
+    # Respond function. Passing type here to give relevant reponses back.
     def respond(self, input, type):
          # check each pattern
         for (pattern, response) in self._pairs:
-            #Adding type to the input
+            #Add type to the input
             if(type):
                 newinput = type+":"+input
             else:
                 newinput=input
-            #print "New Input %s" %(newinput)
+
             match = pattern.match(newinput)
-             # did the pattern match?
+
             if match:
-                #print "Inside match"
-                resp = random.choice(response)    # pick a random response
-                #print response
-                #print resp
+                resp = random.choice(response)      # pick a random response
                 resp = self._wildcards(resp, match) # process wildcards
 
                  # fix munged punctuation at the end
@@ -119,8 +111,9 @@ class Chat(object):
                 if resp[-2:] == '??': resp = resp[:-2] + '?'
                 return resp
 
-     # Hold a conversation with a chatbot
+     # Conversation method
     def converse(self, quit="quit"):
+        
         filterlist = ["hi","how are","how're","hello","hey","hiya","you","me","I am","I","me","they","my","myself","u",
         "r","i","your","you're","i'm"]
 
@@ -134,58 +127,62 @@ class Chat(object):
             if input:
                 while input[-1] in "!.?":
                     input = input[:-1]
-                #Checking if the question was already asked
-
+                
+                # Check if the question was already asked
                 if input in hist_ques:
                     print self.respond(input,"repeat")
                 else:
                     hist_ques.append(input)
-
-                #Passing input to see of there is an mathematical expression
+                
+                # Pass input to see if it contains a mathematical expression
                 ques,answer = self.parse_mathexpression(input)
                 ques_tokens = input.lower().split()
 
-                c = filter(lambda (x): True if x.lower() in ques_tokens else False, filterlist)  
-
-                if(answer):
+                # Check if question contains a word in filterlist
+                c = filter(lambda (x): True if x.lower() in ques_tokens else False, filterlist)
+                
+                if(answer):    
+                # Evaluate mathematical expression
                     try:
                         answer = eval(answer)
                         print self.respond(str(answer),"maths:answer")
                     except:
                         print self.respond(ques,"maths:error")
-                elif(len(c)==0):
-                #If no mathematical expression then pass question to wolfram alpha
+                elif(len(c)==0): #
+                # If no mathematical expression then pass question to wolfram alpha
                     answer =  self.get_fromwolfram(input)
 
                     if (len(answer)> 0 and len(answer)<80):
-                        #print "Answer from wolfram %s" %(answer)
+                    # If wolfram has a short answer
                         print self.respond(str(answer),"wolfram:answer")
                     else:
                         pass
-                        #print "either no wolfram answer or its too long"
-                # Here start a generic conversation, ask new questions, change topic etc
 
+                # Start a generic conversation, ask new questions, change topic etc.
+
+                # Extract named entities from input
                 self.named_entity = self.get_namedentity(input)
-                print hist_topics
 
-
+                # Respond based on type of named entity Person, Organization, Location, or Facility
                 if(self.named_entity[1]):
-                    print self.named_entity[1]
-                    print self.respond(str("".join(self.named_entity[1])),"person")
+                    print self.respond(str("".join(self.named_entity[1][0])),"person")
                 elif(self.named_entity[0]):
                     print self.respond(str("".join(self.named_entity[0][0])),"organization")
                 elif(self.named_entity[2]):
-                    print self.named_entity[2][0]
                     print self.respond(str("".join(self.named_entity[2][0])),"location")
                 elif(self.named_entity[3]):
                     print self.respond(str("".join(self.named_entity[3][0])),"facility")
                 else:
+                    # If can't find named entity, converse about a previous topic/noun.
                     if len(hist_topics)>5:
                         oldtopic = random.choice(hist_topics)
                         print self.respond(oldtopic[0],"oldtopic")
                     else:
+                        #give a response matching one of the pairs
                         print self.respond(input,"")
 
+
+    # Parses math expressions to evaluate
     def parse_mathexpression(self,input):
         pattern = re.compile('([^\d+/*-/%]*)([\d+/*-/%]+)')
         match =  pattern.match(input)
@@ -196,23 +193,23 @@ class Chat(object):
         else:
             return "",""
 
+    # Get answer about users topic from wolfram alpha API
     def get_fromwolfram(self, input):
-        #print "Inside wolfram"
         url  = 'http://api.wolframalpha.com/v2/query?appid=UAGAWR-3X6Y8W777Q&input='+input.replace(" ","%20")+'&format=plaintext'
-        #print url
         data = urllib2.urlopen(url).read()  
         #soup = BeautifulSoup.BeautifulSoup(data)  ## changed to work for Vanessa's import statement
         soup = BeautifulSoup(data)
         keys = soup.findAll('plaintext')
         if (keys):
-            #Printing the first returned rresult of the query. The first result is the heading, second
+            #Printing the first returned result of the query. The first result is the heading, second
             #result is the actual value hence printing [1:2]
             for k in keys[1:2]:
                 output = k.text
         else:
             output = ""
         return output
-        
+    
+    # Finds named entities in the users input
     def get_namedentity(self,input):
         self.orglist = []
         self.personlist = []
@@ -221,7 +218,7 @@ class Chat(object):
 
         text = nltk.pos_tag(input.split())
 
-        #get nouns from input
+        # Get nouns from input and add them to the historical topics list
         nouns = [x for x in text if x[1][0] == 'N']
         for noun in nouns:
             hist_topics.append(noun)
