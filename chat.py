@@ -114,7 +114,7 @@ class Chat(object):
      # Conversation method
     def converse(self, quit="quit"):
         
-        filterlist = ["hi","how are","how're","hello","hey","hiya","you","me","I am","I","me","they","my","myself","u",
+        filterlist = ["hi","how are","how're","hello","hey","hiya","howdy","you","me","I am","I","me","they","my","myself","u",
         "r","i","your","you're","i'm"]
 
         input = ""
@@ -128,11 +128,16 @@ class Chat(object):
                 while input[-1] in "!.?":
                     input = input[:-1]
                 
+                repeat_question = False    #reset repeat_question
+                math_answer= False         #reset math_answer
+
                 # Check if the question was already asked
                 if input in hist_ques:
                     print self.respond(input,"repeat")
+                    repeat_question = True
                 else:
                     hist_ques.append(input)
+                
                 
                 # Pass input to see if it contains a mathematical expression
                 ques,answer = self.parse_mathexpression(input)
@@ -146,6 +151,8 @@ class Chat(object):
                     try:
                         answer = eval(answer)
                         print self.respond(str(answer),"maths:answer")
+                        math_answer = True
+
                     except:
                         print self.respond(ques,"maths:error")
                 elif(len(c)==0): #
@@ -161,25 +168,27 @@ class Chat(object):
                 # Start a generic conversation, ask new questions, change topic etc.
 
                 # Extract named entities from input
-                self.named_entity = self.get_namedentity(input)
+                if not (math_answer or repeat_question):
+                    self.named_entity = self.get_namedentity(input)
 
-                # Respond based on type of named entity Person, Organization, Location, or Facility
-                if(self.named_entity[1]):
-                    print self.respond(str("".join(self.named_entity[1][0])),"person")
-                elif(self.named_entity[0]):
-                    print self.respond(str("".join(self.named_entity[0][0])),"organization")
-                elif(self.named_entity[2]):
-                    print self.respond(str("".join(self.named_entity[2][0])),"location")
-                elif(self.named_entity[3]):
-                    print self.respond(str("".join(self.named_entity[3][0])),"facility")
-                else:
-                    # If can't find named entity, converse about a previous topic/noun.
-                    if len(hist_topics)>5:
-                        oldtopic = random.choice(hist_topics)
-                        print self.respond(oldtopic[0],"oldtopic")
+                    # Respond based on type of named entity Person, Organization, Location, or Facility
+                    if(self.named_entity[1]):
+                        print self.respond(str("".join(self.named_entity[1][0])),"person")
+                    elif(self.named_entity[0]):
+                        print self.respond(str("".join(self.named_entity[0][0])),"organization")
+                    elif(self.named_entity[2]):
+                        print self.respond(str("".join(self.named_entity[2][0])),"location")
+                    elif(self.named_entity[3]):
+                        print self.respond(str("".join(self.named_entity[3][0])),"facility")
                     else:
-                        #give a response matching one of the pairs
-                        print self.respond(input,"")
+                        # If can't find named entity, converse about a previous topic/noun.
+                        if len(hist_topics)>5:
+                            print hist_topics
+                            oldtopic = random.choice(hist_topics)
+                            print self.respond(oldtopic[0],"oldtopic")
+                        else:
+                            #give a response matching one of the pairs
+                            print self.respond(input,"")
 
 
     # Parses math expressions to evaluate
@@ -219,9 +228,10 @@ class Chat(object):
         text = nltk.pos_tag(input.split())
 
         # Get nouns from input and add them to the historical topics list
-        nouns = [x for x in text if x[1][0] == 'N']
+        nouns = [x for x in text if x[1][0] == 'N' and x[0].lower() not in ['hi', 'hello','hey','howdy', 'i',"i'm", 'you','he','she','they','we', 'mimi']]
         for noun in nouns:
-            hist_topics.append(noun)
+            if noun not in hist_topics:
+                hist_topics.append(noun)
 
         out = nltk.ne_chunk(text)
 

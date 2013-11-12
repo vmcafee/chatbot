@@ -13,16 +13,17 @@ import chat as c
 
 pairs = (
 
-     (r'(hi|hello|hey|howdy|what\'s up)(.*)',
-     ( "hi!!! how r u!!",
-      "Hello! how have you been?",
-      "Hi, what's up?")),
+     (r'(hi|hello|hey|howdy|hiya|what\'s up)(.*)',
+     ( "Hi! How are you?",
+      "Hello! How have you been?",
+      "Hi, want to ask me something?")),
      (r"repeat:(.*)",
-     ( "You already said that!!",
-       "Say something new, we've already talked about that!!")
+     ( "You already said that!",
+       "Say something new, we've already talked about that!",
+       "Let's talk about something new!")
      ),
     (r"maths:answer:(.*)",
-     ( "I <3 Math!! That's an easy one, the answer is %1",
+     ( "I <3 math! That's an easy one, the answer is %1",
        "Hmm.. mathematics, well the answer is %1",
        "Looks like you like math too, the answer is %1")
      ),
@@ -31,8 +32,8 @@ pairs = (
        "Hmm.. mathematics, but check you expression again")
      ),
      (r"wolfram:answer:what is(.*)",
-     ( "That's an easy one, answer is %1",
-       "I got an answer for you!  %1")),
+     ( "Let's see... the answer is %1",
+       "I've got an answer for you!  %1")),
     (r"wolfram:answer: who is(.*)",
      ( "Why do you ask? I will still tell you %1")
      ),
@@ -55,13 +56,13 @@ pairs = (
        "I hear that's a cool place to visit if you haven't already been there.")
      ),
     (r"facility:(.*)",
-     ( "Have you been to this facility??",
-       "%1 is a famous facility?"
-       "This would be a good place to visit if you haven't already been here")
+     ( "Have you been to this artifact?",
+       "%1 is a famous artifact?"
+       "That would be a good place to visit if you haven't already been here.")
      ),
     (r"oldtopic:(.*)",
      ( "Let's talk more about %1",
-       "You seem to like talking about %1, tell me more.")
+       "I remember you mentioning %1 before, tell me more.")
      ),
     (r'I\'m (.*)',
     ( "ur%1? that's great! tell me more!",
@@ -120,7 +121,10 @@ pairs = (
     (r'(.*)(no|yes)(.*)',
     ( "ok, got it! what's your next question",
       "cool, what else do you want to ask me?")),
-
+    (r'(good|fine|okay|ok)(.*)',
+    ( "OK!",
+      "All right!",
+      "Great!")),
     (r'quit',
     ( "mom says i have to go eat dinner now :,( bye!!",
       "awww u have to go?? see u next time!!",
@@ -135,14 +139,13 @@ pairs = (
     (r'(.*)',
     ( "Man u talk a lot!!!",
       "Is that a question?",
-      "I don't feel like talking anymore",
-      "boooooring!! ur not very fun")),
+      "Haha you're fun!")),
     )
   
 chatbot = c.Chat(pairs, nltk.chat.eliza.reflections)
 
 def mimi_chat():
-    print "Hi there! I'm Mimi and I like answering questions. Ask me something. I can solve math problems and like chatting about people and places."
+    print "Hi there! I'm Mimi and I like answering questions. I can solve math problems and like chatting about people and places."
     chatbot.converse()
 
 def demo():
