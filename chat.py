@@ -17,7 +17,6 @@ import urllib2
 import nltk
 
 
-
 reflections = {
  "am"     : "are",
  "was"    : "were",
@@ -186,13 +185,19 @@ class Chat(object):
                     elif(self.named_entity[3]):
                         print self.respond(str("".join(self.named_entity[3][0])),"facility")
                     else:
-                        # If can't find named entity, converse about a previous topic/noun.
-                        if len(hist_topics)>5:
-                            #print hist_topics
-                            oldtopic = random.choice(hist_topics)
-                            print self.respond(oldtopic[0],"oldtopic")
+                        # If can't find named entity, converse about a previous named entity
+                        # after a few have been mentioned. But only 60% of the time.
+                        if random.random() > .6:
+                            if len(hist_topics)>3:
+                                #choose a random topic from the list of stored topics
+                                oldtopic = random.choice(hist_topics)
+                                print self.respond(oldtopic,"oldtopic")
+                            else:
+                                #give a response matching one of the pairs
+                                print self.respond(input,"")
                         else:
                             #give a response matching one of the pairs
+                            print input
                             print self.respond(input,"")
 
 
@@ -234,27 +239,25 @@ class Chat(object):
 
         text = nltk.pos_tag(input.split())
 
-        # Get nouns from input and add them to the historical topics list
-        nouns = [x for x in text if x[1][0] == 'N' and x[0].lower() not in ['hi', 'hello','hey','howdy', 'i',"i'm", 'you','he','she','they','we', 'mimi']]
-        for noun in nouns:
-            if noun not in hist_topics:
-                hist_topics.append(noun)
-
         out = nltk.ne_chunk(text)
 
         for chunk in out:
             if hasattr(chunk,'node'):
                 if chunk.node =='ORGANIZATION':
                     organization = ' '.join([c[0] for c in chunk.leaves()])
+                    hist_topics.append(organization)
                     self.orglist.append(organization)
                 if chunk.node =='PERSON':
                     person = ' '.join([c[0] for c in chunk.leaves()])
+                    hist_topics.append(person)
                     self.personlist.append(person)
                 if chunk.node =='GSP' or chunk.node =='GPE' :
                     gpe = ' '.join([c[0] for c in chunk.leaves()])
+                    hist_topics.append(gpe)
                     self.gpelist.append(gpe)
                 if chunk.node =='FACILITY':
                     facility = ' '.join([c[0] for c in chunk.leaves()])
+                    hist_topics.append(facility)
                     self.facilitylist.append(facility)
 
         return [self.orglist, self.personlist, self.gpelist,self.facilitylist]
